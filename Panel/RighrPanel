@@ -1,0 +1,15 @@
+package 报告1.test10.Panel;
+
+import javax.swing.*;
+
+import static 报告1.test10.MyFrame.column;
+import static 报告1.test10.MyFrame.row;
+
+public class RightPanel extends JScrollPane{
+    public static JTable jt = new JTable(row,column);
+
+    public RightPanel(){
+        super(jt);
+        jt.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);//关闭表格自动调整状态
+    }
+}
