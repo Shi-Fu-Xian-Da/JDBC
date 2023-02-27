@@ -1,0 +1,38 @@
+package 报告1.test10;
+
+import javax.swing.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+
+public class Main {
+    public static JFrame myFrame01=null;
+    public static Connection sample = null;
+    //建立DB2数据库连接
+    public void createConnection()
+    {
+        try{
+            sample = DriverManager.getConnection("jdbc:db2://192.168.23.132:50000/sample","student","student");
+            System.out.println("连接完成");
+            sample.setAutoCommit(false);
+        } catch (Exception e) {
+            System.out.println ("\n  Error loading DB2 Driver...\n");
+            System.out.println (e);
+            System.exit(1);
+        }
+    }
+    public void init(){
+        createConnection();
+        MyFrame.readData();
+        myFrame01=new MyFrame("55200717石奂哲");
+        //关闭窗口意味着结束进程
+        myFrame01.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        myFrame01.setSize(1800,1080);
+        myFrame01.setLocation(0,0);
+        /*//读取数据库中的数据至内存*/
+        //显示窗口
+        myFrame01.setVisible(true);
+    }
+    public static void main(String[] args) {
+        new Main().init();
+    }
+}
