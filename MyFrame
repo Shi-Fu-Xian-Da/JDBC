@@ -1,0 +1,78 @@
+package 报告1.test10;
+
+import 报告1.test10.Panel.LeftPanel;
+import 报告1.test10.Panel.RightPanel;
+import javax.swing.*;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import static 报告1.test10.Main.sample;
+
+public class MyFrame extends JFrame {
+    public static String[][] row = null;
+    //列名
+    public static String column[] = {"EMPNO","FIRSTNME","MIDINIT","LASTNAME","WORKDEPT","PHONENO", "HIREDATE","JOB","EDLEVEL","SEX","BIRTHDATE","SALARY","BONUS","COMM"};
+    public static JSplitPane jsp=null;
+
+    //刷新已有的列表
+    public static void refreshJSP()
+    {
+        RightPanel.jt = new JTable(row,column);
+        RightPanel.jt.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);//关闭表格自动调整状态
+        //重新创建右侧JScrollPane
+        JScrollPane sp = new JScrollPane(RightPanel.jt);
+        jsp.setContinuousLayout(true);//支持连续布局
+        jsp.setDividerLocation(250);//分割条150像素
+        jsp.setDividerSize(7);
+        jsp.setRightComponent(sp);
+        //myFrame01.revalidate();
+    }
+    //读取数据
+    public static void readData()
+    {
+        Statement st = null;
+        String sql = null;
+        ResultSet rs = null;
+        int n = 0;
+        try{
+            st = sample.createStatement();
+            sql = "select * from student.TEMPL";
+            rs = st.executeQuery(sql);
+            while(rs.next()){
+                n++;
+            }
+            rs.close();
+        }catch(Exception e){
+            System.out.println("读取TEMPL表出错！");
+        }
+        row = new String[n][14];
+        try{
+            rs = st.executeQuery(sql);
+            int i = 0;
+            while(rs.next()){
+                for(int j = 0 ; j < 14 ; ++j)
+                    row[i][j] = rs.getString(j+1);
+                i++;
+            }
+            rs.close();
+            st.close();
+        }catch(Exception e){
+            System.out.println("读取TEMPL表出错！");
+        }
+    }
+
+    public MyFrame(String title){
+        super(title);
+        //TODO 设置分割面板
+        jsp = new JSplitPane();
+        jsp.setContinuousLayout(true);//支持连续布局
+        jsp.setDividerLocation(250);//分割条150像素
+        jsp.setDividerSize(7);
+        this.add(jsp);
+        //左侧
+        LeftPanel lp=new LeftPanel();
+        jsp.setLeftComponent(lp);
+        //右侧
+        RightPanel rp=new RightPanel();
+        jsp.setRightComponent(rp);
+    }
+}
